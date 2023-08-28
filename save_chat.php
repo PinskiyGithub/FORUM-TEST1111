@@ -1,0 +1,1 @@
+<?phpif (isset($_POST['data'])) {    file_put_contents('chat.txt', $_POST['data'], FILE_APPEND);}?>

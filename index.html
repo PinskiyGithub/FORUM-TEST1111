@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forum</title>
+</head>
+<body>
+    <h1>Forum</h1>
+    <form id="form">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form> 
+    <div id="chat"></div>
+    <script>
+        const form = document.getElementById('form');
+        const chat = document.getElementById('chat');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+            if (username && message) {
+                const data = `${username}: ${message}\n`;
+                fetch('/save_chat.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `data=${encodeURIComponent(data)}`
+                });
+                chat.innerHTML += data;
+                form.reset();
+            }
+        });
+        window.addEventListener('load', () => {
+            fetch('/read_chat.php')
+                .then(response => response.text())
+                .then(data => chat.innerHTML = data);
+        });
+    </script>
+</body>
+</html>
